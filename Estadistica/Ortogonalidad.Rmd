@@ -1,0 +1,163 @@
+---
+title: "Ortogonalidad"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+output_dir: "Estadistica/html_files"
+---
+
+## Ortogonalidad en estadística
+
+En estadística, la **ortogonalidad** entre dos variables se refiere a que su **producto interno es igual a cero**. Es decir, su **correlación es cero**.
+
+## Ortogonalidad y multicolinealidad
+
+En modelos como la regresión lineal, buscamos evitar la **multicolinealidad**, es decir, que las variables independientes estén altamente correlacionadas entre sí. Es un poco arbitrario, pero *un poco* de multicolinealidad es aceptable; recuerda que esto lo vemos al evaluar los supestos de, por ejemplo, una ANOVA.
+
+- **Ortogonalidad perfecta** = correlación exactamente 0.  
+- **Baja multicolinealidad** = correlación pequeña, pero distinta de 0.  
+
+---
+
+## Ortogonalidad en regresión lineal
+
+Consideremos el modelo más sencillo para una regresión lineal:
+
+$$
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon \\
+$$
+Donde:
+
+- $Y =$ vairable de respuesta
+- $\beta_0 =$ intercepto
+- $\beta_1 =$ estimador/coeficiente 1
+- $X_1 =$ valor observado de variable indpendiente 1
+- $\beta_2 =$ estimador/coeficiente 2
+- $X_2 =$ valor observado de variable indpendiente 2
+- $\epsilon =$ error irreducible
+
+Si $X_1$ y $X_2$ son ortogonales:
+
+- El estimador de $\beta_1$ **no cambia** al incluir $X_2$ en el modelo.
+- El estimador de $\beta_2$ **no depende** de $X_1$.
+
+En este caso, si decidiéramos evaluar el efecto de cada variable por separado en su respectiva regresión, los coeficientes **NO** deberían de cambiar drásticamente. Esto ocurre porque cada variable explica una parte **única y no compartida** de la variabilidad de $Y$.
+
+---
+
+## Interpretación geométrica
+
+En regresión, cada variable puede interpretarse como un **vector en el espacio de las observaciones**.
+
+- Ortogonalidad → vectores con ángulo de 90°.
+- No existe proyección de un vector sobre el otro.
+- No comparten información lineal.
+
+Muchos métodos multivariados construyen componentes ortogonales para evitar redundancia, por ejemplo:
+
+- Principal Component Analysis (PCA)
+- Multiple Factor Analysis (MFA)
+
+En PCA, los componentes principales son combinaciones lineales **ortogonales entre sí**, lo que permite capturar la máxima varianza sin duplicar información.
+
+---
+
+## Resumen
+
+La ortogonalidad en estadística implica ausencia de correlación lineal entre variables. En regresión y ANOVA, esto facilita:
+
+- Mayor interpretabilidad de efectos
+- Estimaciones más estables
+
+## Ejemplo
+
+```{r}
+set.seed(10)
+
+n <- 100
+
+# Variables ortogonales (independientes)
+X1 <- rnorm(n)
+X2 <- rnorm(n)
+
+# Graficamos
+plot(X1,X2)
+
+# Verificamos correlación
+cor(X1, X2)
+
+# Genereamos una variable de respuesta
+Y <- 3 + # Intercepto
+  2*X1 + # Coeficiente multiplicado por la observación
+  5*X2 + # Coeficiente multiplicado por la observación
+  rnorm(n, sd = 1) # Error irreducible
+
+# Modelo simple (una sola variable independiente)
+mod_X1 <- lm(Y ~ X1)
+
+# Modelo múltiple (ambas variables independientes)
+mod_full <- lm(Y ~ X1 + X2)
+
+summary(mod_X1)
+summary(mod_full)
+
+```
+
+**Recuerda que no van a ser idénticos debido al error irreducible**
+```{r}
+
+library(ggplot2)
+datos <- data.frame(X1 = X1, Y = Y)
+ggplot(datos, aes(x = X1, y = Y)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Ajuste de regresión lineal (Predictores ortogonales)",
+       subtitle = "La pendiente coincide con el efecto en el modelo múltiple",
+       x = "X1",
+       y = "Y") +
+  theme_minimal()
+
+ggplot(datos, aes(x = X2, y = Y)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Ajuste de regresión lineal",
+       subtitle = "La pendiente coincide con el efecto en el modelo múltiple",
+       x = "X2",
+       y = "Y") +
+  theme_minimal()
+
+library(plotly)
+# Creamos grid para el plano
+grid <- expand.grid(
+  X1 = seq(min(X1), max(X1), length.out = 30),
+  X2 = seq(min(X2), max(X2), length.out = 30)
+)
+
+grid$Y_hat <- predict(mod_full, newdata = grid)
+
+# Convertimos a matriz para superficie
+z_matrix <- matrix(grid$Y_hat, nrow = 30, ncol = 30)
+
+# Gráfica 3D
+plot_ly() %>%
+  add_markers(x = ~X1, y = ~X2, z = ~Y,
+              marker = list(size = 3),
+              data = data.frame(X1, X2, Y)) %>%
+  add_surface(x = unique(grid$X1),
+              y = unique(grid$X2),
+              z = z_matrix,
+              opacity = 0.5) %>%
+  layout(title = "Plano de regresión con predictores ortogonales",
+         scene = list(
+           xaxis = list(title = "X1"),
+           yaxis = list(title = "X2"),
+           zaxis = list(title = "Y")
+         ))
+
+```

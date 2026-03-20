@@ -1,0 +1,11 @@
+---
+title: "Argumentos"
+output:
+  html_document: default
+  pdf_document: 
+    toc: true
+    number_sections: true
+date: "2026-03-07"
+editor_options: 
+  chunk_output_type: inline
+---

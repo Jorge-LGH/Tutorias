@@ -1,0 +1,81 @@
+---
+title: "MANCOVA (Multivariate Analysis of Covariance)"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+output_dir: "Estadistica/html_files"
+---
+## ¿Qué es MANCOVA?
+
+La MANCOVA es una extensión de la MANOVA que permite analizar múltiples variables de respuesta mientras se controla el efecto de una o más covariables continuas. Es decir, la MANCOVA evalúa si existen diferencias entre grupos en varias variables de respuesta después de ajustar por el efecto de otras variables que podrían influir en los resultados.
+
+El modelo puede representarse como:
+
+$$
+\mathbf{Y} = \mathbf{XB} + \mathbf{Z\Gamma} + \mathbf{E}
+$$
+
+donde:
+
+- $\mathbf{Y}$ = matriz de variables de respuesta
+- $\mathbf{X}$ = variables categóricas (factores)
+- $\mathbf{Z}$ = covariables continuas
+- $\mathbf{E}$ = matriz de errores
+
+El objetivo es evaluar si los grupos difieren en sus vectores de medias ajustadas después de considerar el efecto de las covariables.
+
+---
+
+## Supuestos
+
+Además de tener que cumplir con los supuestos de la MANOVA, la MANCOVA debe de cumplir algunos otros:
+
+1. **Independencia de las observaciones**
+
+2. **Normalidad multivariada**  
+   Las variables de respuesta deben seguir aproximadamente una distribución normal multivariada dentro de cada grupo.
+
+3. **Homogeneidad de matrices de covarianza**  
+   Las matrices de varianza-covarianza deben ser similares entre los grupos.
+
+4. **Relación lineal entre covariables y variables de respuesta**
+
+5. **Homogeneidad de pendientes de regresión**  
+   La relación entre la covariable y las variables de respuesta debe ser similar entre los grupos.
+
+---
+
+## Ejemplo con datos reales
+
+```{r}
+# Selección de datos
+data(iris)
+
+# Quitamos Petal width tener dos variables de respuesta y una covariable
+datos <- iris[,c("Sepal.Length","Sepal.Width","Petal.Length","Species")]
+head(datos)
+
+# Graficamos nuestros datos
+library(ggplot2)
+ggplot(datos, aes(Petal.Length, Sepal.Length, color = Species)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Relación entre la covariable y la variable de respuesta",
+       x = "Petal Length (Covariable)",
+       y = "Sepal Length") +
+  theme_minimal()
+
+# Modelo de mancova
+modelo_mancova <- manova(
+  cbind(Sepal.Length, Sepal.Width) ~ Species + Petal.Length, # Variables de respuesta dado nuestra variable 
+                                                             # independiente más el efecto de la covariable
+  data = datos)
+
+summary(modelo_mancova, test = "Wilks")
+summary.aov(modelo_mancova)
+```

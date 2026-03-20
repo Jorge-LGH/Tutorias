@@ -1,0 +1,104 @@
+---
+title: "Hotelling Test"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+output_dir: "Estadistica/html_files"
+---
+
+## ¿Qué es la prueba de Hotelling?
+
+La **prueba de Hotelling (Hotelling's T² test)** es una generalización multivariada de la prueba de *t* de Student.
+
+Mientras que la prueba *t* evalúa diferencias entre medias cuando solo se observa **una variable**, la prueba de Hotelling permite evaluar diferencias entre **vectores de medias** cuando se observan **múltiples variables de respuesta simultáneamente**.
+
+Es decir, en lugar de comparar:
+
+$$
+\mu_1 = \mu_2
+$$
+para una sola variable, la prueba evalúa:
+
+$$
+\boldsymbol{\mu}_1 = \boldsymbol{\mu}_2
+$$
+
+donde $\boldsymbol{\mu}$ representa un **vector de medias** de varias variables.
+
+Esto nos permite evaluar si los grupos analizados son diferentes en el conjunto de variables observadas, es decir, si todo el conjunto de variables varía entre los grupos.
+
+---
+
+## Supuestos
+
+Al igual que la prueba *t*, la prueba de Hotelling requiere ciertos supuestos para que sus resultados sean válidos:
+
+1. **Independencia de las muestras**  
+   Las observaciones dentro de cada grupo y entre grupos deben ser independientes.
+
+2. **Normalidad multivariada**  
+   Las variables analizadas deben seguir aproximadamente una **distribución normal multivariada**.
+
+3. **Homogeneidad de matrices de covarianza**  
+   En el caso de dos muestras, se asume que ambas poblaciones comparten la **misma matriz de varianza–covarianza**.
+
+---
+
+## Interpretación geométrica
+
+Cuando trabajamos con múltiples variables, cada observación puede representarse como un punto en un espacio multidimensional. Por ejemplo un espacio con dos variables tiene dos dimensiones, un espacio con tres variables es tridimensional; y un espacio con $p$ variables tiene $p$ dimensiones. En este espacio, cada grupo tiene un **centro**, que corresponde a su **vector de medias**. La prueba de Hotelling evalúa qué tan lejos están estos centros entre sí, considerando también la variabilidad de los datos. 
+
+Visualmente, el análisis puede imaginarse como:
+
+- Cada grupo forma una nube de puntos en el espacio multivariado.
+- Cada nube tiene un centro (vector de medias).
+- La prueba evalúa si los centros están suficientemente separados considerando la dispersión de las nubes.
+
+Si las nubes de puntos se sobrelapan, la prueba probablemente no detectará diferencias significativas; sin embargo, si los centros están claramente separados en el espacio multivariado, el estadístico $T^2$ será mayor y podremos rechazar la hipótesis nula. Es decir, se evalúa la distancia entre los centros de las variables de las muestras para determinar si se acepta o rechaza la hipótesis nula.
+
+---
+
+## Ejemplos
+
+```{r}
+library(ggplot2)
+library(Hotelling)
+
+# Cargar datos
+data(iris)
+
+# Seleccionar dos especies
+datos <- subset(iris, Species %in% c("setosa","versicolor"))
+
+# Variables a analizar
+vars <- datos[,c("Sepal.Length","Sepal.Width")]
+
+# Separar grupos
+grupo1 <- subset(datos, Species=="setosa")[,c("Sepal.Length","Sepal.Width")]
+grupo2 <- subset(datos, Species=="versicolor")[,c("Sepal.Length","Sepal.Width")]
+
+# Calcular centros (vectores de medias)
+centros <- aggregate(cbind(Sepal.Length,Sepal.Width) ~ Species, datos, mean)
+centros
+
+ggplot(datos, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_point(data = centros,
+             aes(Sepal.Length, Sepal.Width),
+             size = 5,
+             shape = 8,
+             color = "black") +
+  labs(title = "Representación geométrica de dos grupos",
+       subtitle = "Las estrellas negras representan los centros (vectores de medias)",
+       x = "Sepal Length",
+       y = "Sepal Width") +
+  theme_minimal()
+
+print(hotelling.test(grupo1, grupo2))
+```

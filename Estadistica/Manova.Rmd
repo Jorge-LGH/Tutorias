@@ -1,0 +1,71 @@
+---
+title: "MANOVA"
+output:
+  html_document: default
+  pdf_document: 
+    toc: true
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+---
+# MANOVA (Multivariate Analysis of Variance)
+
+## ¿Qué es MANOVA?
+
+El MANOVA es una extensión multivariada del ANOVA. Mientras que el ANOVA evalúa si existen diferencias entre grupos considerando una sola variable de respuesta, la MANOVA permite evaluar diferencias entre grupos considerando varias variables de respuesta simultáneamente.
+
+La hipótesis nula establece que los vectores de medias de los grupos son iguales:
+
+$$
+H_0 : \boldsymbol{\mu}_1 = \boldsymbol{\mu}_2 = \dots = \boldsymbol{\mu}_k
+$$
+
+donde cada $\boldsymbol{\mu}$ representa el vector de medias multivariado de un grupo.
+
+La MANOVA evalúa si los grupos difieren considerando la estructura conjunta de las variables, incluyendo sus correlaciones.
+
+---
+
+## Supuestos
+
+Para que los resultados de la MANOVA sean válidos, deben cumplirse ciertos supuestos:
+
+1. **Independencia de las observaciones**  
+   Las observaciones deben ser independientes entre sí.
+
+2. **Normalidad multivariada**  
+   Las variables de respuesta deben seguir aproximadamente una distribución normal multivariada dentro de cada grupo.
+
+3. **Homogeneidad de matrices de covarianza**  
+   Las matrices de varianza-covarianza deben ser similares entre los grupos.
+
+---
+
+## Ejemplo 
+
+```{r}
+# Cargar datos
+data(iris)
+
+# Seleccionar datos 
+datos <- iris[, c("Sepal.Length","Sepal.Width","Species")]
+head(datos)
+
+# Representación visual
+library(ggplot2)
+ggplot(datos, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(size = 2, alpha = 0.7) +
+  labs(title = "Distribución de especies en el espacio multivariado",
+       x = "Sepal Length",
+       y = "Sepal Width") +
+  theme_minimal()
+
+# Modelo de MANOVA
+modelo_manova <- manova(
+  cbind(Sepal.Length, Sepal.Width) ~ Species,  # Variables de respuesta múltiples explicado por variable independiente
+  data = datos)
+
+summary(modelo_manova)
+summary.aov(modelo_manova)
+```

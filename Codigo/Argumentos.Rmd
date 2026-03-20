@@ -1,0 +1,32 @@
+---
+title: "Argumentos"
+output:
+  html_document: default
+  pdf_document: 
+    toc: true
+    number_sections: true
+date: "2026-03-07"
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Argumentos en programación
+
+En R, así como en el resto de lenguajes de programación, la correcta ejecución de operaciones y funciones dependen de la información e indicaciones proporcionadas por los usuarios. En el caso de R, esta vital información es dada en la forma de argumentos. Los argumentos son parámetros separados por comas dentro de las funciones en los que se separan las indicaciones y la información que se requiere para que las funcionas operen de la forma deseada.
+
+---
+
+## Estructura en R
+
+Tal como se mencionó antes, los argumentos sperados por comas dentro de las funciones especifican la información e indicaciones adicionales para que una función se ejecute; sin embargo, cabe destacar que existen funciones en las que algunos argumentos pueden ser omitidos, mientras que en otras, se deben de especificar explícitamente cada uno de ellos para que estas puedan ejecutarse.
+
+A continuación podemos ver un ejemplo de 
+
+---
+
+## Información adicional
+
+
+---
+
+

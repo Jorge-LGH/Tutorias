@@ -1,0 +1,47 @@
+---
+title: "Caras de Chernoff"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+output_dir: "Estadistica/html_files"
+---
+## Las caras de Chernoff
+
+Las caras de Chernoff fueron inventadas por el científico Herman Chernoff en 1973. Esta herramienta está diseñada para poder apreciar datos multivariados de una forma más intuitiva dado que los humanos podemos reconocer pequeños cambios en las caras de los individuos. La idea detrás de uso uso es que cada variable está asociada con alguna característica de la cara, como su forma, tamaño, nariz, etc.
+
+---
+
+## Usos en estadística
+Las caras de Chargaff son representaciones visuales de un conglomerado de variables en un plano de dos dimensiones; estas dimensiones a su vez son acompañadas de las características propias de las caras, por lo que es una represntación multidimensional en un plano bi-dimensional. Cabe aclarar que es necesario saber qué variable está asociada a cada característica facial para poder tener un entendimeinto más intuitivo y rápido.
+
+Cabe acalarar que **ES UNA HERRAMIENTA DE VISUALIZACIÓN**, no un análisis estadístico en sí mismo.
+
+---
+## Ejemplos
+
+1.- Arrestos en Estados Unidos.
+
+
+En este ejemplo, usaremos la tabla de datos para arrestos por estado en Estados Unidos. Esta table contiene 50 renglones, uno por cada estado, y cuatro columnas. La primera columna se refiere a asesinatos, la segunda a asalto (agresiones), porcerntaje de población urbana del estado y violaciones. Cabe aclarar que son datos por cada 100,000 habitantes en el año de 1953.
+
+```{r, message=F}
+# Cargar posibles librerías para caras de Chernoff
+library(aplpack)
+library(DescTools)
+
+# Cargar datos
+data("USArrests")
+head(USArrests)
+
+# aplpack
+faces(USArrests, labels = rownames(USArrests))
+
+# DescTools
+PlotFaces(USArrests, labels = rownames(USArrests))
+```

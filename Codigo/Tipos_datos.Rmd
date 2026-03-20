@@ -1,0 +1,103 @@
+---
+title: "Tipos de datos"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    number_sections: true
+date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
+output_dir: "~/Work/Tutorias/Estadistica/html_files"
+---
+
+## ¿Qué son los tipos de datos?
+
+Así como en el lenguaje común donde tenemos sutantivos, verbos, adjetivos, probombres, etc., en programación no todos los valores y variables son iguales. Recordemos el ejemplo de primaria donde se nos dice que no podemos sumar peras y manzanas; es lo mismo en programación.
+
+Los tipos de datos en R se refieren a la clase de variable o valor que tiene un objeto mientras trabajamos con él. Cada tipo de objeto tiene características intrínsecas que nos permiten, o no, efectuar algunos procesos específicos. Por este motivo es importante saber identificar y manipular adecuadamente cada tipo de dato.
+
+---
+
+## Tipos básicos
+
+Si bien, existen una gran variedad de tipos de datos en R, a continuación se presentan algunos de los tipos de datos más extensamente usados.
+
+### Numéricos
+
+Los datos numéricos, como bien dice su nombre, son datos que representan números. Dicho de otra manera, representan cantidades. No importa si son números enteros, decimales, positivos o negativo. La **excepción** son los números imaginarios. 
+
+```{r}
+class(111111)
+class(-1213)
+class(1.1)
+class(-0.01011)
+```
+
+### Caracteres
+
+Los caracteres en R se refiere a todos aquellos valores que sean considerados como *texto*. Si bien, como veremos más adelante, no siempre son letras per se, usaremos el concepto de esta manera para un mayor entendimiento. Estos caracteres pueden ser letras individuales, textos completos, etc. En R, los caracteres se designan con comillas simples ('') o con comillas dobles (""), pero **SIEMPRE** deben ser usados en pares, o el la computadora no lo contemplará como tal.
+
+```{r}
+class("Esto es un caracter")
+class("otro")
+class('d')
+class('Siempre con su respectivo par')
+class("Aunque sea un número, 15 es tomado como caracter por estar en comillas")
+```
+
+### Lógicos/Booleanos
+
+El último tipo de dato que veremos son lo tipos lógicos o booleanos. Este tipo de dato se refiere al concepto de lógica, donde usamos **Verdadero**, **Falso** y **NA**. Los primeros dos son bastante intuitivos y puden ser escritos como **T** o como **F** por true y false respectivamente. Por otro lado, el concepto de **NA** se refiere a que no existe, **NO** es **0**, es **NO EXISTE** o **NO APLICA**. Por ejemplo, imaginemos que a una persona sin hijos se le pregunta cuántos hijos tiene; en ese caso diría 0, pero si se le pregunta por el nombre de su hijo de 10 años, este no existe, por lo que no puede ser 0, no existe y no aplica.
+
+```{r}
+class(TRUE)
+class(FALSE)
+class(T)
+class(F)
+class(NA)
+```
+
+---
+
+## Funciones de utilidad
+
+En muchas ocasiones es bueno saber con qué tipo de dato estamos trabajando antes de empezar el trabajo como tal, por lo que saber preguntarle a la computadora con qué estamos trabajando, o bien, decirle que lo tome como otro tipo de dato, es de vital importancia para trabajar eficientemente.
+
+### Determinar tipo de dato
+
+Tal como se ha visto antes, usamos la función `class()` disponible en R para determinar el tipo o clase de objeto con el que estamos trabajando. Esta función actúa con **cualquier** tipo de dato disponible en R, por lo que su uso es casi ubicuo.
+
+```{r}
+class(123)
+class("Ejemplo de class")
+class(T)
+```
+
+### Cambiar tipo de dato
+
+En algunas otras ocasiones, como se demostró en el apartado de caracteres, podemos hacer uso de un tipo de dato y considerarlo como otro. El ejemplo mostrado anteriormente muestra cómo el número 15 es considerado como un caracter pese a realmente ser un número. Pero a veces, tenemos un dato que queremos cambiar. Por ejempli, imagina que analizas el resultado de muchas carreras de una persona, esta va a tener un rango de posiciones que pueden ser consideradas como números, pero quizás nos interese más considerarlo como una categoría en caracter y decidimos pasar el número a caracter.
+
+```{r}
+class(2)               # Posición 2 como número
+class(as.character(2)) # Pisición 2 como caracter
+```
+
+En el ejemplo anteriormente mostrado, hacemos uso de la función `as.character()` para considerar un objeto, en ese caso de tipo numérico, como un caracter. Esto se puede realizar de manera similar con varios tipos de datos con la ayuda de funciones que, por lo general, empiezan con `as.` y le sigue el tipo de dato con el que queremos que se maneje ahora.
+
+```{r}
+# De número a caracter
+class(12)
+class(as.character(12))
+
+# De caracter a número
+class("100")
+class(as.numeric("100"))
+
+# De número a lógico
+class(1)
+class(as.logical(1))
+```
+
+Cabe aclarar que deben de se compatibles los objetos para que estos se puedan cambiar de un tipo de dato a otro. Por ejemplo, no es poisble, ni lógico, cambiar la frase *Esto es un caracter* a un número, pues no contiene ningún tipo de número en sí mismo. Es por esto que entender los tipos de datos y sus características resulta tan útil.
