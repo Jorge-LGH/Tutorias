@@ -1,0 +1,50 @@
+---
+title: "Comandos básicos de Linux"
+subtitle: "Guía de referencia"
+output:
+  html_document:
+    toc: false
+    number_sections: false
+---
+
+# Comandos básicos
+
+| Comando | ¿Qué hace? | Ejemplo |
+|:---|:---|:---|
+| `pwd` | Muestra la ruta del directorio actual. | `pwd` |
+| `ls` | Lista los archivos y directorios. | `ls -la` |
+| `cd` | Permite cambiar de directorio. | `cd data` |
+| `mkdir` | Crea un nuevo directorio. | `mkdir resultados` |
+| `cp` | Copia archivos o directorios. | `cp archivo.txt backup/` |
+| `mv` | Mueve o cambia el nombre de archivos y directorios. | `mv archivo.txt nuevo_nombre.txt` |
+| `rm` | Elimina archivos. | `rm archivo.txt` |
+| `wget` | Descarga archivos desde una dirección de internet (URL). | `wget https://ejemplo.com/archivo.txt` |
+| `head` | Muestra las primeras líneas de un archivo. | `head -n 5 archivo.txt` |
+| `tail` | Muestra las últimas líneas de un archivo. | `tail -n 5 archivo.txt` |
+| `grep` | Busca palabras o patrones dentro de archivos. | `grep "Tumor" datos.csv` |
+| `man` | Muestra el manual de un comando. | `man grep` |
+
+# Atajos para navegar por el sistema
+
+| Símbolo | Significado | Ejemplo |
+|:---:|:---|:---|
+| `~` | Directorio personal del usuario (*home*). | `cd ~` |
+| `/` | Directorio raíz del sistema. | `cd /` |
+| `.` | Directorio actual. | `ls .` |
+| `..` | Directorio padre (un nivel arriba). | `cd ..` |
+
+# Opciones útiles
+
+| Opción | Función | Ejemplo |
+|:---:|:---|:---|
+| `-l` | Muestra información detallada. | `ls -l` |
+| `-a` | Muestra también los archivos ocultos. | `ls -a` |
+| `-r` | Permite copiar directorios y su contenido de forma recursiva. | `cp -r carpeta1 carpeta2` |
+| `-p` | Crea los directorios intermedios que no existan. | `mkdir -p proyecto/datos/raw` |
+| `-n` | En `head` y `tail`, indica cuántas líneas mostrar. | `head -n 5 archivo.txt` |
+
+# Consideraciones importantes
+
+- Linux distingue entre mayúsculas y minúsculas. Por ejemplo, `Datos`, `datos` y `DATOS` son nombres diferentes.
+- El comando `rm` elimina archivos sin enviarlos normalmente a una papelera de reciclaje. Verifica siempre la ruta y el nombre antes de ejecutarlo.
+- Puedes consultar la ayuda de un comando con `man nombre_del_comando`; para salir del manual, presiona `q`.
